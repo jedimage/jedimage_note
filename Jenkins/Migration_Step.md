@@ -1,0 +1,37 @@
+Migrate Repositories Bitbucket to Local-Gitlab
+----------------------------------------------
+Step1 <<Gitlab>> : 
+1. Login to gitlab account using admin permission
+2. Clone repositories from Bitbucket 
+2.1 New Project -> Import Project -> Repo by URL 
+2.2 Insert Required Information from original (such as Git Repo URL/Username/Password)
+3. Restrict groups to access repositories
+
+Step2 <<Jenkins>> : Prepare clone Jenkins job
+1. "New Item" -> Scroll down to bottom "Copy from ..<copy from existing job>.." 
+2. Source Code Management
+2.1 Change Repositories xxx@bitbucket.org/aaa/bbb.git
+2.2 Change Credential to Accessability this repo 
+2.3 else is default from clone
+3. Build Triggers
+3.1 Trigged at and copy webhook url "Build when a change is pushed to Gitlab webhook url: https://[[COPY-THIS-URL]]/A/B/C "
+3.2 Click "Advance"
+3.2.1 Allowed Branches: "master" or "origin" branch only
+3.2.2 Generate Secret token: "[[COPY-THIS-SECRET-TOKEN]]"
+4. Apply and Save
+
+Step3 <<Gitlab>> :
+1. Select repositories want to use webhook
+2. left-side bar : Settings -> Webhooks
+3. Settings Webhook here
+3.1 URL : https://[[PASTE-YOUR-WEBHOOK-URL]]/A/B/C  <=== from step2(3.1)
+3.2 Secret Token: abc123def456ghi789jkl012 <=== from step2(3.2.2)
+3.3 Trigged at "Push events" 
+3.3.1 "master" , It's trigged if master branch was pushed.
+3.3.2 if blank, It's trigged every branch.
+4. Disable SSL verification at bottom of page.
+5. Save
+6. Test Project hook : Test -> Push Events
+
+Finalize:
+Test git push to verify CI/CD flow

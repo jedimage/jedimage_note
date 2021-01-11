@@ -1,0 +1,38 @@
+Allow Builder Server / Deployment Server to Buid, Commit, Push, Pull and Authentication to Gitlab:
+
+**<< Builder/Deployment Server >>**
+Allow Builder/Deplotment Server to Build Buid, Commit, Push, Pull and Authentication to Gitlab and Jenkins
+1. Login to Builder/Deployment Machine using Jenkins user or Central user to create SSH-key-pair
+* Linux Distro -> use "Terminal"
+* Windows Server -> use "Git Bash"
+
+2. use command
+`$ ssh-keygen -f ~/.ssh/id_rsa -N ""            # Generate key without passphase`
+`$ ls ~/.ssh/*`
+- id_rsa ---------> Private key
+- id_rsa.pub -----> Public key
+
+**<< Gitlab >>**
+Provide Public-key to gitlab
+1. Login to your Gitlab Server using Central User or user that can access to all your project.
+2. Gitlab -> User Profile -> Settings -> SSH Keys
+3. add Public-key from Builder Server to gitlab
+
+Example Public-key: `ssh-rsa AA...CC jenkins@messageapi.yourdomain.com`
+
+**<< Jenkins >>**
+Provide Private-key to jenkins
+1. Go to "Manage Jenkins -> Manage Credentials -> Global Credentials" and click "Add Credentials"
+2. "Add Credentials" and fill the information
+`kind: "SSH Username with private key"`
+`Private key [] Enter directly` << Click Bullet "Enter Directly" and Add private key here
+
+Example Private-key:
+>-----BEGIN OPENSSH PRIVATE KEY-----
+>AAA1234
+>...
+>ZZZ4321
+>-----END OPENSSH PRIVATE KEY-----
+
+
+ref: https://git-scm.com/book/en/v2/Git-on-the-Server-Generating-Your-SSH-Public-Key
