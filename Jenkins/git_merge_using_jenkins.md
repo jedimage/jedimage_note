@@ -36,6 +36,6 @@ sshagent(['git-credentials-id']) {
 ```
 to run git command to repo
 
-method1,2 ref: https://github.com/jenkinsci/gitlab-plugin
-method3 ref: https://plugins.jenkins.io/git/
-method4 ref: https://stackoverflow.com/questions/38769976/is-it-possible-to-git-merge-push-using-jenkins-pipeline
+- method1,2 ref: https://github.com/jenkinsci/gitlab-plugin
+- method3 ref: https://plugins.jenkins.io/git/
+- method4 ref: https://stackoverflow.com/questions/38769976/is-it-possible-to-git-merge-push-using-jenkins-pipeline
