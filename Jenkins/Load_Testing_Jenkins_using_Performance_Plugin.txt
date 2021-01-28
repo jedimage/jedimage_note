@@ -1,0 +1,51 @@
+Jenkins Plugin
+|-> Plugins Performance
+
+=======================
+Apache JMeter
+=======================
+
+Apache JMeter: using for making jmx script only. (Requires Java8 or later)
+1. Add thread group to test plan
+Test Plan -> Add -> Thread(Users) -> Thread Group
+
+Set the value below in "Thread Properties" categories:
+- Number of Thread (users): Number of users per concurrent in time.
+- Ramp-up period (sec): Every xx sec the next concurrent users will landing.
+- Loop Count: time of data set will landing.
+
+Example: 
+Number of Threads: 10
+Ramp-Up: 2
+Loop Count: 10
+
+This Thread Group will run the script 10 times(10 loops) for 10 concurrent users with a Ramp-up time of 2 seconds.
+
+2. Add a HTTP Request to page of the tested.
+Thread Group -> Add -> Sampler -> HTTP Request
+set the following values:
+- Name: Name_of_group
+- Server name or IP: http://yourwebsite.com
+And save your script with the name like "My_First_Script.jmx"
+
+=======================
+Jenkins
+=======================
+1. New Freestyle Project
+2. Set up Performance test to run JMeter script directly
+Build section: Add build step -> Run Performance Test and Click Advance but not change anything in the advanced options.
+Taurus tool parameters: My_First_Script.jmx
+and Save
+3. Add "JMeter" script to the path project location on Jenkins machine
+Example: /home/jenkins/workspace/My_First_Script.jmx
+4. Build Now
+
+=======================
+Troubleshooting
+=======================
+1. You don't have global bzt installed on this Jenkins host. Installing it globally will speed up job. Run 'sudo pip install bzt' to install it. / 
+2. Performance test: No virtualenv found on this Jenkins host. Install it with 'sudo pip install virtualenv'.
+Solved[1-2]: Install pip or pip3 first and you pip or pip3 to install virtualenv and bzt
+3. Make sure your jenkins user can bash /usr/local/bin/bzt by globally, If not you can add bzt local to global using symbolic link ```$ ln -s /usr/local/bin/bzt /bin/.```
+
+ref: https://www.blazemeter.com/blog/how-to-use-the-jenkins-performance-plugin
