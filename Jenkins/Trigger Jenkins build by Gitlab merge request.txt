@@ -1,0 +1,36 @@
+**JENKINS**
+1. Create new Item using Freestyle Project
+2. Source Code Management
+- Select: Git and Fill in your repository and credential
+- Branch to build: In this case is "**master**" branch <--- branch to build
+
+3. Build Triggers Section
+- Build when a change is pushed to GitLab. GitLab webhook URL: ... and copy this url
+- Untick: [   ] Push Events
+- Untick: [   ] Opened Merge Request Events
+- Tick: [ / ] Accepted Merge Request Events
+
+4. Click "Advanced..."
+5. Allowed branches -> Filter branches by name
+- Include: **master** <--- This is filter only branch "master" to trigger this job
+- Secret token: <--GENERATE-SECRET-TOKEN-AND-KEEP-ITS-->
+
+6. Save Projects
+
+**Gitlab**
+1. your project -> Settings -> Webhooks
+
+2. Fill in your jenkins webhooks url and secret token
+- Untick: [  ] Push events
+- Tick: [ / ] Merge Request events
+
+3. SSL Verification
+- Untick: [  ] Enable SSL verification and click "Add webhook"
+
+**Test Merge request is working fine**
+1. Create new file from branch release(or any branch) Create Merge Request from "release" into "master"
+
+2. Approve request
+- Untick: [   ] Delete source branch and click Merge
+
+3. Check project at jenkins project will be trigged by gitlab merge request approve

@@ -1,0 +1,23 @@
+1. New Item using Freestyle Project
+2. Source Code Management: Fill your Repo URL and Credential and Branches to build this git
+3. Bottom of this section: Additional Behaviours -> Add -> "Merge before build" and Fill in information below.
+- Name of repository: Name of the repository, such as "origin".
+- Branch to merge to: The name of the branch within the named repository to merge to, such as "master".
+
+4. Post-build Actions: Add post-build action -> Git Publisher
+- Ticked: Push only if Build Succeeds
+- Ticked: Merge Results
+Branches Section
+- Branch to push: example "master"
+- Target remote name: example "origin"
+
+5. If you use a pipeline script, create a new Freestyle project. At post-build action, add script to build job above
+..
+..
+post {
+	success {
+		build '2_push_to_remote_repo'
+	}
+}
+..
+..
