@@ -21,6 +21,8 @@ comfirm your sonarqube server is working by browsing url: http://your-host:9000/
 username: admin
 password: admin
 
+first login system will force you to change password
+
 get your authentication token: Administrator -> My Account -> Security
 generate token and keep its.
 
@@ -38,9 +40,11 @@ Description: sonarqube-token
 Name: sonarqube-server
 Server URL: http://your-sonarqube-server:9000
 Server authentication token: [your-credentials-at-2.2]
+and save
 
-
+D. Install SonarScanner for MSBuild or SonarScanner if you want.
 
 ref1: https://docs.docker.com/engine/install/centos/
 ref2: https://hub.docker.com/_/sonarqube
 ref3: https://docs.sonarqube.org/latest/analysis/scan/sonarscanner-for-jenkins/
+ref4: https://docs.sonarqube.org/latest/analysis/scan/sonarscanner-for-msbuild/
