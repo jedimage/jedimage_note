@@ -1,16 +1,23 @@
 version: "3"
-
+  
 services:
   sonarqube:
     image: sonarqube:8.7-community
     container_name: sonarqube
     hostname: sonarqube
+    restart: always
     ports:
       - 9000:9000
     environment:
-      - sonar.jdbc.username=sonarq_admin
-      - sonar.jdbc.password=sonarq_passw0rd
+      - sonar.jdbc.username=sonar_admin
+      - sonar.jdbc.password=sonar_password
       - sonar.search.javaAdditionalOpts=-Dbootstrap.system_call_filter=false
+      - SONAR_SECURITY_REALM=LDAP
+      - ldap.url=ldap://dc2.hengleasing.local
+      - ldap.bindDn=CN=AD Query,CN=Managed,DC=my,DC=company,DC=local
+      - ldap.bindPassword=xSECRETx
+      - ldap.user.baseDn=OU=Test Bench Users,DC=my,DC=company,DC=local
+      - ldap.user.request= (&(objectClass=person)(sAMAccountName={login}))
     volumes:
       - /etc/sonarqube/logs:/opt/sonarqube/logs
       - /etc/sonarqube/data:/opt/sonarqube/data
@@ -20,9 +27,10 @@ services:
     image: postgres:13.1
     container_name: db
     hostname: db
+    restart: always
     environment:
-      - POSTGRES_USER=sonardb_admin
-      - POSTGRES_PASSWORD=sonardbpassword
+      - POSTGRES_USER=sonar_db_admin
+      - POSTGRES_PASSWORD=sonar_db_password
     volumes:
       - pg_db:/var/lib/postgresql
       - pg_data:/var/lib/postgresql/data

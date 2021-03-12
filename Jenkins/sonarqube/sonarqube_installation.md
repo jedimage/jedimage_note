@@ -1,0 +1,62 @@
+**A. Install docker and docker-compose**
+Install docker
+```$ sudo yum install -y yum-utils```
+```$ sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo```
+```$ sudo yum install docker-ce docker-ce-cli containerd.io```
+```$ sudo systemctl enable docker ; sudo systemctl restart docker```
+
+Instal docker-compose
+```$ sudo curl -L "https://github.com/docker/compose/releases/download/1.28.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose```
+```$ sudo chmod +x /usr/local/bin/docker-compose```
+```$ sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose```
+```$ docker-compose --version```
+
+**B. Install Sonarqube using docker-compose**
+```$ sudo mkdir -p /etc/sonarqube/{logs,data,extension}```
+check at "sonarqube-docker-compose.yml"
+
+```$ sudo docker-compose -f /etc/sonarqube/sonarqube-docker-compose.yml up -d```
+comfirm your sonarqube server is working by browsing url: http://your-host:9000/ login using
+username: admin
+password: admin
+
+first login system will force you to change password
+
+get your authentication token: Administrator -> My Account -> Security
+generate token and keep its.
+
+[optional] I've installed sonarqube with ssl using NGINX and use reverse proxy to container port
+
+**C. Integrate Sonarqube to Jenkins**
+(1) Jenkins -> Manage Jenkins -> Plugin Manager -> install Jenkins plugins named "SonarQube Scanner for Jenkins"
+(2) Add Server Authentication token 
+(2.1) Jenkins -> Manage Jenkins -> Manage Credentials 
+(2.2) Global Credentials -> Add Credentials
+Kind: Secret Text
+Scope: Global
+Secret: [your-auth-token-at-step-B]
+Description: sonarqube-token
+
+(3) Jenkins -> Manage Jenkins -> Configure System -> SonarQube Servers
+Name: sonarqube-server
+Server URL: http://your-sonarqube-server:9000
+Server authentication token: [your-credentials-at-2.2]
+and save
+
+**D. Install SonarScanner for MSBuild or SonarScanner if you want.**
+(1) Download sonarscanner-for-msbuild [ref4] and extract to your build machine
+(2) Add "SonarScanner.MSBuild.exe" to Environment Variable
+(3) Example Pipeline Script using with Jenkins [see at Jenkinsfile]
+
+>..
+>$ SonarScanner.MSBuild.exe begin /k:"your_project_key" /n:"your_project_name" /d:sonar.host.url="$sonarqube_server_url" />d:sonar.login="$sonarqube_token"
+>$ MSBuild.exe your/csproj/file.csproj
+>$ SonarScanner.MSBuild.exe end /d:sonar.login="$sonarqube_token"
+>..
+
+(4) check your analysys at buttom of jenkins console : ANALYSIS SUCCESSFUL, you can browse http://your-sonarqube-server:9000/dashboard?id=your_project_key
+
+ref1: https://docs.docker.com/engine/install/centos/
+ref2: https://hub.docker.com/_/sonarqube
+ref3: https://docs.sonarqube.org/latest/analysis/scan/sonarscanner-for-jenkins/
+ref4: https://docs.sonarqube.org/latest/analysis/scan/sonarscanner-for-msbuild/
