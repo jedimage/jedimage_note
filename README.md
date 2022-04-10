@@ -5,3 +5,4 @@ jedimage's note that's all about everything I'm learning or plan to learn in the
 - game programming using unity or any engine.
 - Orchestration
 - Message Queue (Kafka)
+- Ruby
